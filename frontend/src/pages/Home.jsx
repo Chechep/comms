@@ -1,4 +1,5 @@
 import Hero from "../components/Hero";
+import Services from "../components/Services";
 import Features from "../components/Features";
 import Pricing from "../components/Pricing";
 
@@ -9,18 +10,31 @@ export default function Home() {
       style={{ background: "var(--color-bg)" }}
     >
       {/* Hero Section */}
-      <section className="relative">
-        <Hero />
+      <section className="relative py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <Hero />
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="relative py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <Services />
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="relative py-16 md:py-24">
-        <Features />
+      <section className="relative py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <Features />
+        </div>
       </section>
 
       {/* Pricing Section */}
-      <section className="relative py-16 md:py-24">
-        <Pricing />
+      <section className="relative py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <Pricing />
+        </div>
       </section>
     </main>
   );
