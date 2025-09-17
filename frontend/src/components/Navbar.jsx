@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-export default function Navbar({ themeColor }) {
+export default function Navbar({ darkMode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [brandColor, setBrandColor] = useState(themeColor || "#14B8A6");
 
-  useEffect(() => {
-    setBrandColor(themeColor || "#14B8A6");
-  }, [themeColor]);
+  // Glow only in dark mode
+  const glowStyle = darkMode
+    ? { boxShadow: "0 0 10px #fff, 0 0 20px #fff" }
+    : {};
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -19,11 +19,7 @@ export default function Navbar({ themeColor }) {
   ];
 
   const buttonClass =
-    "px-4 py-2 text-sm font-medium rounded-lg transition transform duration-200 focus:outline-none";
-
-  const glowStyle = {
-    boxShadow: `0 0 10px ${brandColor}, 0 0 20px ${brandColor}`,
-  };
+    "px-4 py-2 text-sm font-medium rounded-lg border border-white text-white transition transform duration-200 focus:outline-none hover:scale-110 hover:animate-shake";
 
   return (
     <nav className="fixed w-full z-50 top-0 backdrop-blur-md bg-transparent text-white">
@@ -49,7 +45,7 @@ export default function Navbar({ themeColor }) {
             {/* Login */}
             <Link
               to="/login"
-              className={`${buttonClass} border border-white hover:scale-110 hover:animate-shake`}
+              className={buttonClass}
               style={glowStyle}
             >
               Login
@@ -58,8 +54,8 @@ export default function Navbar({ themeColor }) {
             {/* Signup */}
             <Link
               to="/signup"
-              className={`${buttonClass} hover:scale-110 hover:animate-shake`}
-              style={{ backgroundColor: brandColor, ...glowStyle }}
+              className={buttonClass}
+              style={glowStyle}
             >
               Start Free Trial
             </Link>
@@ -93,7 +89,7 @@ export default function Navbar({ themeColor }) {
           <div className="flex flex-col space-y-2 mt-2">
             <Link
               to="/login"
-              className={`${buttonClass} border border-white text-center hover:scale-110 hover:animate-shake`}
+              className={`${buttonClass} text-center`}
               style={glowStyle}
               onClick={() => setIsOpen(false)}
             >
@@ -101,8 +97,8 @@ export default function Navbar({ themeColor }) {
             </Link>
             <Link
               to="/signup"
-              className={`${buttonClass} text-center hover:scale-110 hover:animate-shake`}
-              style={{ backgroundColor: brandColor, ...glowStyle }}
+              className={`${buttonClass} text-center`}
+              style={glowStyle}
               onClick={() => setIsOpen(false)}
             >
               Start Free Trial
