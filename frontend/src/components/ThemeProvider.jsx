@@ -3,41 +3,71 @@ import { useEffect, useState } from "react";
 const themes = {
   teal: {
     brand: "#14B8A6",
-    gradient: "linear-gradient(135deg, #5eead4, #14b8a6)", // light teal
+    gradient: "linear-gradient(135deg, #5eead4, #14b8a6)",
   },
   zinc: {
     brand: "#71717A",
-    gradient: "linear-gradient(135deg, #d4d4d8, #71717a)", // light zinc
+    gradient: "linear-gradient(135deg, #d4d4d8, #71717a)",
   },
   cyan: {
     brand: "#06B6D4",
-    gradient: "linear-gradient(135deg, #67e8f9, #06b6d4)", // aqua cyan
+    gradient: "linear-gradient(135deg, #67e8f9, #06b6d4)",
   },
   rose: {
     brand: "#F43F5E",
-    gradient: "linear-gradient(135deg, #fda4af, #f43f5e)", // pinkish rose
+    gradient: "linear-gradient(135deg, #fda4af, #f43f5e)",
+  },
+  light: {
+    brand: "#000000", // black accent
+    gradient: "#ffffff", // plain white bg
   },
 };
 
 function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("teal");
-  const [darkMode, setDarkMode] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "teal";
+  });
 
+  const [darkMode, setDarkMode] = useState(() => {
+    const stored = localStorage.getItem("darkMode");
+    if (stored !== null) return stored === "true";
+    return window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  // Apply theme + persist
   useEffect(() => {
     const root = document.documentElement;
 
     if (darkMode) {
-      // Dark mode → black bg + white text
       root.style.setProperty("--color-bg", "#000000");
       root.style.setProperty("--color-text", "#ffffff");
       root.style.setProperty("--color-brand", themes[theme].brand);
+    } else if (theme === "light") {
+      root.style.setProperty("--color-bg", "#ffffff");
+      root.style.setProperty("--color-text", "#000000");
+      root.style.setProperty("--color-brand", themes[theme].brand);
     } else {
-      // Light mode → theme gradient + white text
       root.style.setProperty("--color-bg", themes[theme].gradient);
       root.style.setProperty("--color-text", "#ffffff");
       root.style.setProperty("--color-brand", themes[theme].brand);
     }
+
+    localStorage.setItem("theme", theme);
+    localStorage.setItem("darkMode", darkMode);
   }, [theme, darkMode]);
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handler = (e) => {
+      setDarkMode(e.matches);
+    };
+
+    media.addEventListener("change", handler);
+    return () => media.removeEventListener("change", handler);
+  }, []);
 
   return (
     <>
@@ -62,45 +92,66 @@ function ThemeSwitcher({ theme, setTheme, darkMode, setDarkMode }) {
     { name: "zinc", gradient: "bg-gradient-to-br from-zinc-200 to-zinc-600" },
     { name: "cyan", gradient: "bg-gradient-to-br from-cyan-200 to-cyan-500" },
     { name: "rose", gradient: "bg-gradient-to-br from-rose-200 to-rose-500" },
+    { name: "light", gradient: "bg-gradient-to-br from-white to-gray-200 border" },
   ];
+
+  const isLightTheme = theme === "light" && !darkMode;
 
   return (
     <div className="relative">
+      {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="p-3 rounded-full text-white shadow-lg hover:scale-110 transition"
+        className={`p-3 rounded-full shadow-lg hover:scale-110 transition ${
+          isLightTheme
+            ? "text-black bg-white border border-gray-300"
+            : "text-white"
+        }`}
         style={{
-          background: `var(--color-brand)`,
-          boxShadow: `0 0 10px var(--color-brand), 0 0 20px var(--color-brand)`,
+          background: isLightTheme ? "#ffffff" : `var(--color-brand)`,
+          boxShadow: isLightTheme
+            ? "0 0 6px rgba(0,0,0,0.2)"
+            : `0 0 10px var(--color-brand), 0 0 20px var(--color-brand)`,
         }}
       >
         🎨
       </button>
 
+      {/* Dropdown */}
       {open && (
-        <div className="absolute bottom-14 right-0 bg-white dark:bg-black shadow-xl rounded-xl p-4 space-y-3 w-44">
+        <div
+          className={`absolute bottom-14 right-0 shadow-xl rounded-xl p-4 space-y-3 w-44 transition ${
+            isLightTheme ? "bg-white text-black" : "bg-white dark:bg-black"
+          }`}
+        >
           <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
             Select Theme
           </h3>
 
+          {/* Theme choices */}
           <div className="flex space-x-3">
             {themeOptions.map((t) => (
               <button
                 key={t.name}
                 onClick={() => setTheme(t.name)}
                 className={`w-8 h-8 rounded-full ${t.gradient} border-2 ${
-                  theme === t.name ? "ring-2 ring-offset-2 ring-brand" : "border-gray-300"
+                  theme === t.name
+                    ? "ring-2 ring-offset-2 ring-[var(--color-brand)]"
+                    : "border-gray-300"
                 }`}
               />
             ))}
           </div>
 
+          {/* Dark mode toggle */}
           <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-sm text-gray-700 dark:text-gray-200">Dark Mode</span>
+            <span className="text-sm text-gray-700 dark:text-gray-200">
+              Dark Mode
+            </span>
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`w-10 h-5 rounded-full flex items-center transition ${
-                darkMode ? "bg-brand" : "bg-gray-300"
+                darkMode ? "bg-[var(--color-brand)]" : "bg-gray-300"
               }`}
             >
               <span

@@ -9,7 +9,6 @@ export default function Signin() {
   const [shakeFields, setShakeFields] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
-  // Regex ensures email is valid and Gmail
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
@@ -28,7 +27,6 @@ export default function Signin() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
     const error = validateField(name, value);
     setErrors((prev) => ({ ...prev, [name]: error || undefined }));
   };
@@ -53,7 +51,6 @@ export default function Signin() {
     });
     setErrors(newErrors);
 
-    // Shake invalid fields
     const shake = {};
     Object.keys(newErrors).forEach((key) => {
       shake[key] = true;
@@ -69,20 +66,20 @@ export default function Signin() {
 
   const handleGoogleSignin = () => {
     alert("Google login clicked!");
-    // Firebase Google Auth can go here
   };
 
   return (
     <section
       className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "var(--color-bg)" }}
+      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
     >
-      <div className="max-w-md w-full bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold mb-6 text-white text-center">Login</h2>
+      <div className="max-w-md w-full p-8 rounded-xl shadow-lg border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md">
+        <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div className={`relative ${errors.email && shakeFields.email ? "animate-shake" : ""}`}>
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70" size={20} />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
             <input
               type="email"
               name="email"
@@ -90,7 +87,7 @@ export default function Signin() {
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-brand transition ${errors.email ? "border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.email ? "border border-red-500" : ""}`}
               required
             />
             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
@@ -98,7 +95,7 @@ export default function Signin() {
 
           {/* Password */}
           <div className={`relative ${errors.password && shakeFields.password ? "animate-shake" : ""}`}>
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70" size={20} />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -106,13 +103,13 @@ export default function Signin() {
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-brand transition ${errors.password ? "border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.password ? "border border-red-500" : ""}`}
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+              className="absolute right-3 top-1/2 -translate-y-1/2 opacity-70"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -122,25 +119,25 @@ export default function Signin() {
           {/* Sign In Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
-            style={{ background: "var(--color-bg)", color: "#fff", borderColor: "#888" }}
+            className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
+            style={{ background: "var(--color-brand)", color: "#fff" }}
           >
             Login
           </button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center my-4 text-white/70">
-          <hr className="flex-grow border-white/30" />
+        <div className="flex items-center my-4 opacity-70">
+          <hr className="flex-grow border-[var(--color-text)]/30" />
           <span className="px-2">or</span>
-          <hr className="flex-grow border-white/30" />
+          <hr className="flex-grow border-[var(--color-text)]/30" />
         </div>
 
         {/* Google Signin Button */}
         <button
           onClick={handleGoogleSignin}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
-          style={{ background: "var(--color-bg)", color: "#444", borderColor: "#888" }}
+          style={{ background: "var(--color-bg-input,#f9f9f9)", color: "var(--color-text)", borderColor: "var(--color-text)" }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">
             <path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-34.1-4.5-50.4H272v95.3h146.9c-6.4 34.4-25 63.5-53.5 83.1v68h86.5c50.5-46.4 81.6-115.1 81.6-196z"/>
@@ -151,9 +148,9 @@ export default function Signin() {
           Login with Google
         </button>
 
-        <p className="text-white/70 text-center mt-4 text-sm">
+        <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
-          <Link to="/Signup" className="text-brand hover:underline">
+          <Link to="/Signup" className="text-[var(--color-brand)] hover:underline">
             Sign Up
           </Link>
         </p>

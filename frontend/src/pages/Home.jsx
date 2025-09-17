@@ -6,8 +6,11 @@ import Pricing from "../components/Pricing";
 export default function Home() {
   return (
     <main
-      className="min-h-screen w-full text-[var(--color-text)] transition-colors duration-500"
-      style={{ background: "var(--color-bg)" }}
+      className="
+        min-h-screen w-full transition-colors duration-500
+        bg-white text-black    /* Light mode */
+        dark:bg-[var(--color-bg)] dark:text-[var(--color-text)]  /* Dark mode */
+      "
     >
       {/* Hero Section */}
       <section className="relative py-24">
