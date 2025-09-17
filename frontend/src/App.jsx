@@ -7,24 +7,35 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Solutions from "./pages/Solutions";
 import Contact from "./pages/Contact";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+
+import ThemeProvider from "./components/ThemeProvider";
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/solutions" element={<Solutions />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div
+          className="flex flex-col min-h-screen"
+          style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)" }}
+        >
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/solutions" element={<Solutions />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
