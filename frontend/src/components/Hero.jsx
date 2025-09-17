@@ -16,14 +16,13 @@ export default function Hero() {
 
   return (
     <section
-      className="relative py-24"
-      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
+      className="relative py-24 bg-[var(--color-bg)] text-[var(--color-text)]"
     >
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         
         {/* LEFT SIDE */}
         <div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-[var(--color-text)]">
             Unified Communication <br />
             Across{" "}
             <AnimatePresence mode="wait">
@@ -33,16 +32,14 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5 }}
-                style={{
-                  color: "var(--color-brand)",
-                }}
+                className="text-[var(--color-brand)]"
               >
                 {words[index]}
               </motion.span>
             </AnimatePresence>
           </h1>
 
-          <p className="text-lg sm:text-xl mb-8 opacity-80 max-w-xl">
+          <p className="text-lg sm:text-xl mb-8 opacity-80 max-w-xl text-[var(--color-text)]">
             Power your business with SMS, WhatsApp, voice calls, and email —
             all in one platform serving schools, hospitals, companies, and more.
           </p>
@@ -80,8 +77,10 @@ export default function Hero() {
                 key={label}
                 className="flex flex-col items-center hover:scale-110 transition"
               >
-                <Icon size={28} style={{ color: "var(--color-brand)" }} />
-                <span className="text-sm mt-2">{label}</span>
+                <Icon size={28} className="text-[var(--color-brand)]" />
+                <span className="text-sm mt-2 text-[var(--color-text)]">
+                  {label}
+                </span>
               </div>
             ))}
           </div>

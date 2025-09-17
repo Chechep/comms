@@ -8,8 +8,7 @@ export default function Home() {
     <main
       className="
         min-h-screen w-full transition-colors duration-500
-        bg-white text-black    /* Light mode */
-        dark:bg-[var(--color-bg)] dark:text-[var(--color-text)]  /* Dark mode */
+        bg-[var(--color-bg)] text-[var(--color-text)]
       "
     >
       {/* Hero Section */}
@@ -20,7 +19,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="relative py-24">
+      <section className="relative py-24 bg-[var(--color-bg-alt,transparent)]">
         <div className="max-w-7xl mx-auto px-4">
           <Services />
         </div>
@@ -34,7 +33,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section className="relative py-24">
+      <section className="relative py-24 bg-[var(--color-bg-alt,transparent)]">
         <div className="max-w-7xl mx-auto px-4">
           <Pricing />
         </div>

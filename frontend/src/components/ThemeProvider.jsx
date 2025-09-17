@@ -92,7 +92,7 @@ function ThemeSwitcher({ theme, setTheme, darkMode, setDarkMode }) {
     { name: "zinc", gradient: "bg-gradient-to-br from-zinc-200 to-zinc-600" },
     { name: "cyan", gradient: "bg-gradient-to-br from-cyan-200 to-cyan-500" },
     { name: "rose", gradient: "bg-gradient-to-br from-rose-200 to-rose-500" },
-    { name: "light", gradient: "bg-gradient-to-br from-white to-gray-200 border" },
+    { name: "light", gradient: "bg-gradient-to-br from-gray-200 to-gray-500" },
   ];
 
   const isLightTheme = theme === "light" && !darkMode;
