@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
+
 
 export default function Signin() {
   const navigate = useNavigate();
@@ -8,6 +11,7 @@ export default function Signin() {
   const [errors, setErrors] = useState({});
   const [shakeFields, setShakeFields] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
@@ -42,7 +46,7 @@ export default function Signin() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
@@ -59,13 +63,28 @@ export default function Signin() {
     setShakeFields(shake);
 
     if (Object.keys(newErrors).length === 0) {
-      alert("Signin successful!");
-      navigate("/home");
+      try {
+        setLoading(true);
+        await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        navigate("/home"); // redirect after login
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleGoogleSignin = () => {
-    alert("Google login clicked!");
+  const handleGoogleSignin = async () => {
+    try {
+      setLoading(true);
+      await signInWithPopup(auth, googleProvider);
+      navigate("/home");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -119,10 +138,11 @@ export default function Signin() {
           {/* Sign In Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105 disabled:opacity-50"
             style={{ background: "var(--color-brand)", color: "#fff" }}
           >
-            Login
+            {loading ? "Signing in..." : "Login"}
           </button>
         </form>
 
@@ -136,7 +156,8 @@ export default function Signin() {
         {/* Google Signin Button */}
         <button
           onClick={handleGoogleSignin}
-          className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105 disabled:opacity-50"
           style={{ background: "var(--color-bg-input,#f9f9f9)", color: "var(--color-text)", borderColor: "var(--color-text)" }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">
@@ -145,7 +166,7 @@ export default function Signin() {
             <path fill="#FBBC05" d="M119.3 326.1c-9.8-28.4-9.8-59 0-87.4V168.3h-89.7c-19 37.4-19 81.3 0 118.7l89.7 39.1z"/>
             <path fill="#EA4335" d="M272 107.1c38.9-.6 76.7 14.1 105.3 41.5l79-79.3C404.3 24.1 342.9-1.2 272 0 164.8 0 74.1 62.1 29.8 150.3l89.7 70.4c21.5-64.3 81.6-112.1 152.5-113.6z"/>
           </svg>
-          Login with Google
+          {loading ? "Signing in..." : "Login with Google"}
         </button>
 
         <p className="text-center mt-4 text-sm">

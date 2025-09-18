@@ -1,9 +1,17 @@
+// src/pages/Signup.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth, googleProvider } from "../firebase"; // ✅ already configured
 
 export default function Signup() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,6 +22,7 @@ export default function Signup() {
   const [shakeFields, setShakeFields] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
@@ -53,8 +62,9 @@ export default function Signup() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
@@ -62,24 +72,36 @@ export default function Signup() {
     });
     setErrors(newErrors);
 
-    const shake = {};
-    Object.keys(newErrors).forEach((key) => {
-      shake[key] = true;
-      setTimeout(
-        () => setShakeFields((prev) => ({ ...prev, [key]: false })),
-        300
-      );
-    });
-    setShakeFields(shake);
+    if (Object.keys(newErrors).length > 0) return;
 
-    if (Object.keys(newErrors).length === 0) {
+    setLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      await updateProfile(userCredential.user, {
+        displayName: formData.username,
+      });
       alert("Signup successful!");
       navigate("/home");
+    } catch (error) {
+      console.error(error.message);
+      setErrors({ general: error.message });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleGoogleSignup = () => {
-    alert("Google signup clicked!");
+  const handleGoogleSignup = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/home");
+    } catch (error) {
+      console.error(error.message);
+      setErrors({ general: error.message });
+    }
   };
 
   return (
@@ -90,10 +112,21 @@ export default function Signup() {
       <div className="max-w-md w-full p-8 rounded-xl shadow-lg border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md">
         <h2 className="text-3xl font-bold mb-6 text-center">Sign Up</h2>
 
+        {errors.general && (
+          <p className="text-red-600 text-center mb-4">{errors.general}</p>
+        )}
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Username */}
-          <div className={`relative ${errors.username && shakeFields.username ? "animate-shake" : ""}`}>
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+          <div
+            className={`relative ${
+              errors.username && shakeFields.username ? "animate-shake" : ""
+            }`}
+          >
+            <User
+              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              size={20}
+            />
             <input
               type="text"
               name="username"
@@ -101,15 +134,26 @@ export default function Signup() {
               value={formData.username}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.username ? "border border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${
+                errors.username ? "border border-red-500" : ""
+              }`}
               required
             />
-            {errors.username && <p className="text-red-600 text-sm mt-1">{errors.username}</p>}
+            {errors.username && (
+              <p className="text-red-600 text-sm mt-1">{errors.username}</p>
+            )}
           </div>
 
           {/* Email */}
-          <div className={`relative ${errors.email && shakeFields.email ? "animate-shake" : ""}`}>
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+          <div
+            className={`relative ${
+              errors.email && shakeFields.email ? "animate-shake" : ""
+            }`}
+          >
+            <Mail
+              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              size={20}
+            />
             <input
               type="email"
               name="email"
@@ -117,15 +161,26 @@ export default function Signup() {
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.email ? "border border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${
+                errors.email ? "border border-red-500" : ""
+              }`}
               required
             />
-            {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Password */}
-          <div className={`relative ${errors.password && shakeFields.password ? "animate-shake" : ""}`}>
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+          <div
+            className={`relative ${
+              errors.password && shakeFields.password ? "animate-shake" : ""
+            }`}
+          >
+            <Lock
+              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              size={20}
+            />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -133,7 +188,9 @@ export default function Signup() {
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.password ? "border border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${
+                errors.password ? "border border-red-500" : ""
+              }`}
               required
             />
             <button
@@ -143,12 +200,23 @@ export default function Signup() {
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-            {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-600 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
 
           {/* Confirm Password */}
-          <div className={`relative ${errors.confirmPassword && shakeFields.confirmPassword ? "animate-shake" : ""}`}>
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+          <div
+            className={`relative ${
+              errors.confirmPassword && shakeFields.confirmPassword
+                ? "animate-shake"
+                : ""
+            }`}
+          >
+            <Lock
+              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              size={20}
+            />
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
@@ -156,7 +224,9 @@ export default function Signup() {
               value={formData.confirmPassword}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${errors.confirmPassword ? "border border-red-500" : ""}`}
+              className={`w-full pl-10 px-4 py-3 rounded-lg bg-[var(--color-bg-input,#f9f9f9)] text-[var(--color-text)] placeholder-[var(--color-text)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] transition ${
+                errors.confirmPassword ? "border border-red-500" : ""
+              }`}
               required
             />
             <button
@@ -166,16 +236,21 @@ export default function Signup() {
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-            {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
 
           {/* Sign Up Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105 disabled:opacity-60"
             style={{ background: "var(--color-brand)", color: "#fff" }}
           >
-            Sign Up
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
 
@@ -190,20 +265,39 @@ export default function Signup() {
         <button
           onClick={handleGoogleSignup}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
-          style={{ background: "var(--color-bg-input,#f9f9f9)", color: "var(--color-text)", borderColor: "var(--color-text)" }}
+          style={{
+            background: "var(--color-bg-input,#f9f9f9)",
+            color: "var(--color-text)",
+            borderColor: "var(--color-text)",
+          }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">
-            <path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-34.1-4.5-50.4H272v95.3h146.9c-6.4 34.4-25 63.5-53.5 83.1v68h86.5c50.5-46.4 81.6-115.1 81.6-196z"/>
-            <path fill="#34A853" d="M272 544.3c72.9 0 134-24.3 178.7-66.2l-86.5-68c-24 16-55 25.6-92.2 25.6-70.9 0-131-47.8-152.5-112.1h-89.7v70.4c44.3 88.2 135 150.3 242.2 150.3z"/>
-            <path fill="#FBBC05" d="M119.3 326.1c-9.8-28.4-9.8-59 0-87.4V168.3h-89.7c-19 37.4-19 81.3 0 118.7l89.7 39.1z"/>
-            <path fill="#EA4335" d="M272 107.1c38.9-.6 76.7 14.1 105.3 41.5l79-79.3C404.3 24.1 342.9-1.2 272 0 164.8 0 74.1 62.1 29.8 150.3l89.7 70.4c21.5-64.3 81.6-112.1 152.5-113.6z"/>
+            <path
+              fill="#4285F4"
+              d="M533.5 278.4c0-17.4-1.6-34.1-4.5-50.4H272v95.3h146.9c-6.4 34.4-25 63.5-53.5 83.1v68h86.5c50.5-46.4 81.6-115.1 81.6-196z"
+            />
+            <path
+              fill="#34A853"
+              d="M272 544.3c72.9 0 134-24.3 178.7-66.2l-86.5-68c-24 16-55 25.6-92.2 25.6-70.9 0-131-47.8-152.5-112.1h-89.7v70.4c44.3 88.2 135 150.3 242.2 150.3z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M119.3 326.1c-9.8-28.4-9.8-59 0-87.4V168.3h-89.7c-19 37.4-19 81.3 0 118.7l89.7 39.1z"
+            />
+            <path
+              fill="#EA4335"
+              d="M272 107.1c38.9-.6 76.7 14.1 105.3 41.5l79-79.3C404.3 24.1 342.9-1.2 272 0 164.8 0 74.1 62.1 29.8 150.3l89.7 70.4c21.5-64.3 81.6-112.1 152.5-113.6z"
+            />
           </svg>
           Sign Up with Google
         </button>
 
         <p className="text-center mt-4 text-sm">
           Already have an account?{" "}
-          <Link to="/Signin" className="text-[var(--color-brand)] hover:underline">
+          <Link
+            to="/Login"
+            className="text-[var(--color-brand)] hover:underline"
+          >
             Login
           </Link>
         </p>
