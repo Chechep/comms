@@ -7,7 +7,7 @@ import {
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, googleProvider } from "../firebase"; // ✅ already configured
+import { auth, googleProvider } from "../firebase";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ export default function Signup() {
             }`}
           >
             <User
-              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
               size={20}
             />
             <input
@@ -151,7 +151,7 @@ export default function Signup() {
             }`}
           >
             <Mail
-              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
               size={20}
             />
             <input
@@ -178,7 +178,7 @@ export default function Signup() {
             }`}
           >
             <Lock
-              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
               size={20}
             />
             <input
@@ -196,7 +196,7 @@ export default function Signup() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -214,7 +214,7 @@ export default function Signup() {
             }`}
           >
             <Lock
-              className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
               size={20}
             />
             <input
@@ -232,7 +232,7 @@ export default function Signup() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black dark:text-white"
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -266,9 +266,9 @@ export default function Signup() {
           onClick={handleGoogleSignup}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105"
           style={{
-            background: "var(--color-bg-input,#f9f9f9)",
-            color: "var(--color-text)",
-            borderColor: "var(--color-text)",
+            background: "#fff",
+            color: "#000",
+            borderColor: "#000",
           }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">

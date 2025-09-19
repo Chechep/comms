@@ -1,7 +1,9 @@
+// src/pages/Home.jsx
 import Hero from "../components/Hero";
 import Services from "../components/Services";
 import Features from "../components/Features";
 import Pricing from "../components/Pricing";
+import Solutions from "./Solutions";
 
 export default function Home() {
   return (
@@ -12,31 +14,28 @@ export default function Home() {
       "
     >
       {/* Hero Section */}
-      <section className="relative py-24">
-        <div className="max-w-7xl mx-auto px-4">
-          <Hero />
-        </div>
+      <section className="w-full">
+        <Hero />
+      </section>
+
+      {/* Solutions Section */}
+      <section className="w-full">
+        <Solutions />
       </section>
 
       {/* Services Section */}
-      <section className="relative py-24 bg-[var(--color-bg-alt,transparent)]">
-        <div className="max-w-7xl mx-auto px-4">
-          <Services />
-        </div>
+      <section className="w-full">
+        <Services />
       </section>
 
       {/* Features Section */}
-      <section className="relative py-24">
-        <div className="max-w-7xl mx-auto px-4">
-          <Features />
-        </div>
+      <section className="w-full">
+        <Features />
       </section>
 
       {/* Pricing Section */}
-      <section className="relative py-24 bg-[var(--color-bg-alt,transparent)]">
-        <div className="max-w-7xl mx-auto px-4">
-          <Pricing />
-        </div>
+      <section className="w-full">
+        <Pricing />
       </section>
     </main>
   );

@@ -27,19 +27,18 @@ export default function Features() {
 
   return (
     <section
-      className="py-20 px-6"
-      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
+      className="py-12 px-6 transition-colors bg-[var(--color-bg)] text-[var(--color-text)]"
     >
       {/* Title */}
-      <div className="text-center mb-12">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4">Features</h2>
+      <div className="text-center mb-8">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-2">Features</h2>
         <p className="text-lg opacity-80 max-w-2xl mx-auto">
           Everything you need for seamless communication and smarter collaboration.
         </p>
       </div>
 
       {/* Features Grid */}
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
         {features.map((feature, idx) => (
           <motion.div
             key={idx}

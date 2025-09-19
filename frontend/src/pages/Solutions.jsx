@@ -1,70 +1,59 @@
-// Solutions.jsx
-import { Cloud, Cpu, Shield, Users } from "lucide-react";
+// src/pages/Solutions.jsx
 import { motion } from "framer-motion";
+import { Clock, Users, CheckCircle } from "lucide-react";
 
 export default function Solutions() {
-  const solutions = [
+  const stats = [
     {
-      icon: <Cloud className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
-      title: "Cloud Integration",
-      description: "Seamlessly connect apps and services through secure cloud solutions.",
+      icon: <Clock className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      value: "< 2 sec",
+      label: "Message Delivery",
+      description: "Lightning-fast message delivery worldwide",
     },
     {
-      icon: <Cpu className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
-      title: "AI & Automation",
-      description: "Boost efficiency with intelligent workflows and automation tools.",
+      icon: <Users className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      value: "10k+",
+      label: "Recipients",
+      description: "Broadcast to unlimited parents and students",
     },
     {
-      icon: <Shield className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
-      title: "Cybersecurity",
-      description: "Protect your data with top-level security and monitoring solutions.",
-    },
-    {
-      icon: <Users className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
-      title: "Collaboration Tools",
-      description: "Empower teams with real-time collaboration and communication features.",
+      icon: <CheckCircle className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      value: "99.5%",
+      label: "Open Rate",
+      description: "Higher engagement than email communication",
     },
   ];
 
   return (
     <section
-      className="
-        min-h-screen flex items-center justify-center px-6 py-20 transition-colors
-      "
-      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
+      className="min-h-screen flex flex-col items-center justify-center transition-colors bg-[var(--color-bg)] text-[var(--color-text)]"
     >
-      <div className="max-w-6xl w-full text-center">
-        {/* Title */}
-        <h1 className="text-4xl font-extrabold mb-6 drop-shadow-glow">
-          Our Solutions
+      <div className="max-w-6xl w-full text-center px-4">
+        {/* Header */}
+        <h2 className="text-2xl font-semibold text-[var(--color-brand)] mb-2">
+          Trusted Worldwide
+        </h2>
+        <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-glow mb-12">
+          Delivering reliable communication solutions
         </h1>
-        <p className="text-lg opacity-90 mb-14 max-w-2xl mx-auto">
-          Explore the wide range of solutions we offer to help your business
-          thrive in the digital era.
-        </p>
 
-        {/* Grid of solutions */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {solutions.map((solution, idx) => (
+        {/* Stats Section */}
+        <div className="grid gap-8 md:grid-cols-3">
+          {stats.map((stat, idx) => (
             <motion.div
               key={idx}
-              className="
-                p-6 rounded-xl border border-[var(--color-text)]/10 
-                bg-[var(--color-bg-alt,transparent)] backdrop-blur-md text-center
-                transition-transform duration-300
-              "
-              whileHover={{
-                scale: 1.05,
-                boxShadow: `0 0 20px var(--color-brand)`,
-              }}
-              initial={{ opacity: 0, y: 40 }}
+              className="rounded-xl border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md shadow-md p-6 flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
             >
-              {solution.icon}
-              <h3 className="text-xl font-semibold mb-2">{solution.title}</h3>
-              <p className="opacity-80">{solution.description}</p>
+              {stat.icon}
+              <h3 className="text-3xl md:text-4xl font-bold text-[var(--color-brand)]">
+                {stat.value}
+              </h3>
+              <p className="text-lg font-medium">{stat.label}</p>
+              <p className="text-sm opacity-80 mt-1">{stat.description}</p>
             </motion.div>
           ))}
         </div>

@@ -4,7 +4,6 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 
-
 export default function Signin() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -38,7 +37,6 @@ export default function Signin() {
   const handleBlur = (e) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-
     if (error) {
       setErrors((prev) => ({ ...prev, [name]: error }));
       setShakeFields((prev) => ({ ...prev, [name]: true }));
@@ -66,7 +64,7 @@ export default function Signin() {
       try {
         setLoading(true);
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        navigate("/home"); // redirect after login
+        navigate("/home");
       } catch (err) {
         alert(err.message);
       } finally {
@@ -88,17 +86,14 @@ export default function Signin() {
   };
 
   return (
-    <section
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
-    >
+    <section className="min-h-screen flex items-center justify-center px-4 bg-[var(--color-bg)] text-[var(--color-text)] transition-colors">
       <div className="max-w-md w-full p-8 rounded-xl shadow-lg border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md">
         <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div className={`relative ${errors.email && shakeFields.email ? "animate-shake" : ""}`}>
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white" size={20} />
             <input
               type="email"
               name="email"
@@ -114,7 +109,7 @@ export default function Signin() {
 
           {/* Password */}
           <div className={`relative ${errors.password && shakeFields.password ? "animate-shake" : ""}`}>
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 opacity-70" size={20} />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-black dark:text-white" size={20} />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -128,9 +123,13 @@ export default function Signin() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 opacity-70"
+              className="absolute right-3 top-1/2 -translate-y-1/2"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? (
+                <EyeOff size={20} className="text-black dark:text-white" />
+              ) : (
+                <Eye size={20} className="text-black dark:text-white" />
+              )}
             </button>
             {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
           </div>
@@ -158,7 +157,11 @@ export default function Signin() {
           onClick={handleGoogleSignin}
           disabled={loading}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105 disabled:opacity-50"
-          style={{ background: "var(--color-bg-input,#f9f9f9)", color: "var(--color-text)", borderColor: "var(--color-text)" }}
+          style={{
+            background: "#fff",
+            color: "#000",
+            borderColor: "#000",
+          }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">
             <path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-34.1-4.5-50.4H272v95.3h146.9c-6.4 34.4-25 63.5-53.5 83.1v68h86.5c50.5-46.4 81.6-115.1 81.6-196z"/>
@@ -171,7 +174,7 @@ export default function Signin() {
 
         <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
-          <Link to="/Signup" className="text-[var(--color-brand)] hover:underline">
+          <Link to="/Signup" className="hover:underline">
             Sign Up
           </Link>
         </p>
