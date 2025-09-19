@@ -1,4 +1,3 @@
-// src/pages/Templates.jsx
 import { useState, useEffect } from "react";
 import {
   FileText,
