@@ -1,6 +1,16 @@
 // src/pages/Contacts.jsx
 import { useState, useEffect } from "react";
-import { UploadCloud, UserPlus, Trash2, Edit3, Save, X, FileSpreadsheet, Loader2 } from "lucide-react";
+import {
+  UploadCloud,
+  UserPlus,
+  Trash2,
+  Edit3,
+  Save,
+  X,
+  FileSpreadsheet,
+  Loader2,
+  Shield,
+} from "lucide-react";
 import { db, auth } from "../firebase";
 import {
   collection,
@@ -20,12 +30,40 @@ import * as XLSX from "xlsx";
 
 export default function Contacts() {
   const [contacts, setContacts] = useState([]);
-  const [newContact, setNewContact] = useState({ name: "", phone: "", email: "" });
+  const [newContact, setNewContact] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    role: "Member",
+    group: "General",
+  });
   const [editingId, setEditingId] = useState(null);
-  const [editData, setEditData] = useState({ name: "", phone: "", email: "" });
+  const [editData, setEditData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    role: "Member",
+    group: "General",
+  });
   const [uploading, setUploading] = useState(false);
+  const [filterGroup, setFilterGroup] = useState("All"); // 👈 added filter
 
   const user = auth.currentUser;
+
+  // Roles available
+  const roles = ["Admin", "Manager", "Staff", "Member", "Guest"];
+
+  // Groups available
+  const groups = ["General", "Family", "Work", "Clients", "Vendors"];
+
+  // Role colors
+  const roleColors = {
+    Admin: "bg-red-100 text-red-700 border border-red-300",
+    Manager: "bg-blue-100 text-blue-700 border border-blue-300",
+    Staff: "bg-green-100 text-green-700 border border-green-300",
+    Member: "bg-purple-100 text-purple-700 border border-purple-300",
+    Guest: "bg-gray-100 text-gray-700 border border-gray-300",
+  };
 
   // Realtime Firestore listener
   useEffect(() => {
@@ -56,7 +94,7 @@ export default function Contacts() {
         uid: user.uid,
         createdAt: serverTimestamp(),
       });
-      setNewContact({ name: "", phone: "", email: "" });
+      setNewContact({ name: "", phone: "", email: "", role: "Member", group: "General" });
     } catch (err) {
       console.error("Error adding contact:", err);
     }
@@ -74,12 +112,18 @@ export default function Contacts() {
   // Edit contact
   const startEdit = (contact) => {
     setEditingId(contact.id);
-    setEditData({ name: contact.name, phone: contact.phone, email: contact.email || "" });
+    setEditData({
+      name: contact.name,
+      phone: contact.phone,
+      email: contact.email || "",
+      role: contact.role || "Member",
+      group: contact.group || "General",
+    });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditData({ name: "", phone: "", email: "" });
+    setEditData({ name: "", phone: "", email: "", role: "Member", group: "General" });
   };
 
   const handleSaveEdit = async (id) => {
@@ -102,7 +146,6 @@ export default function Contacts() {
       let rows = [];
 
       if (file.name.endsWith(".csv")) {
-        // Parse CSV with PapaParse
         const result = await new Promise((resolve, reject) => {
           Papa.parse(file, {
             header: true,
@@ -113,7 +156,6 @@ export default function Contacts() {
         });
         rows = result;
       } else if (file.name.endsWith(".xlsx")) {
-        // Parse Excel with SheetJS
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data);
         const sheetName = workbook.SheetNames[0];
@@ -124,7 +166,6 @@ export default function Contacts() {
         return;
       }
 
-      // Batch write to Firestore
       const batch = writeBatch(db);
       rows.forEach((row) => {
         const docRef = doc(collection(db, "contacts"));
@@ -132,6 +173,8 @@ export default function Contacts() {
           name: row.name || row.Name || "Unnamed",
           phone: row.phone || row.Phone || "",
           email: row.email || row.Email || "",
+          role: row.role || row.Role || "Member",
+          group: row.group || row.Group || "General",
           uid: user.uid,
           createdAt: serverTimestamp(),
         });
@@ -146,6 +189,12 @@ export default function Contacts() {
       setUploading(false);
     }
   };
+
+  // 👉 Apply group filter
+  const filteredContacts =
+    filterGroup === "All"
+      ? contacts
+      : contacts.filter((c) => c.group === filterGroup);
 
   return (
     <div className="p-8 space-y-8">
@@ -201,6 +250,28 @@ export default function Contacts() {
             onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
             className="w-full px-4 py-2 border rounded-md bg-[var(--color-bg-input)]"
           />
+          <select
+            value={newContact.role}
+            onChange={(e) => setNewContact({ ...newContact, role: e.target.value })}
+            className="w-full px-4 py-2 border rounded-md bg-[var(--color-bg-input)]"
+          >
+            {roles.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+          <select
+            value={newContact.group}
+            onChange={(e) => setNewContact({ ...newContact, group: e.target.value })}
+            className="w-full px-4 py-2 border rounded-md bg-[var(--color-bg-input)]"
+          >
+            {groups.map((g) => (
+              <option key={g} value={g}>
+                {g}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             className="px-6 py-2 rounded-md shadow-md transition hover:scale-105"
@@ -213,16 +284,33 @@ export default function Contacts() {
 
       {/* Contact List */}
       <div className="p-6 border rounded-xl shadow-sm bg-[var(--color-bg-alt)]">
-        <h2 className="text-xl font-semibold mb-4">Contact List</h2>
-        {contacts.length === 0 ? (
-          <p className="opacity-70">No contacts added yet.</p>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <Shield className="w-6 h-6 text-[var(--color-brand)]" />
+          Contact List
+        </h2>
+
+        {/* 👇 Group Filter Dropdown */}
+        <div className="mb-4">
+          <select
+            value={filterGroup}
+            onChange={(e) => setFilterGroup(e.target.value)}
+            className="px-4 py-2 border rounded-md bg-[var(--color-bg-input)]"
+          >
+            <option value="All">All Groups</option>
+            {groups.map((g) => (
+              <option key={g} value={g}>
+                {g}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {filteredContacts.length === 0 ? (
+          <p className="opacity-70">No contacts in this group.</p>
         ) : (
           <ul className="space-y-2">
-            {contacts.map((c) => (
-              <li
-                key={c.id}
-                className="flex justify-between items-center border-b pb-2"
-              >
+            {filteredContacts.map((c) => (
+              <li key={c.id} className="flex justify-between items-center border-b pb-2">
                 {editingId === c.id ? (
                   <div className="flex-1 space-y-2">
                     <input
@@ -243,10 +331,40 @@ export default function Contacts() {
                       onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                       className="w-full px-2 py-1 border rounded-md"
                     />
+                    <select
+                      value={editData.role}
+                      onChange={(e) => setEditData({ ...editData, role: e.target.value })}
+                      className="w-full px-2 py-1 border rounded-md"
+                    >
+                      {roles.map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={editData.group}
+                      onChange={(e) => setEditData({ ...editData, group: e.target.value })}
+                      className="w-full px-2 py-1 border rounded-md"
+                    >
+                      {groups.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 ) : (
                   <span>
-                    <strong>{c.name}</strong> — {c.phone} {c.email && `(${c.email})`}
+                    <strong>{c.name}</strong> — {c.phone}{" "}
+                    {c.email && `(${c.email})`}{" "}
+                    <span
+                      className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
+                        roleColors[c.role] || roleColors.Member
+                      }`}
+                    >
+                      {c.role || "Member"}
+                    </span>
                   </span>
                 )}
 

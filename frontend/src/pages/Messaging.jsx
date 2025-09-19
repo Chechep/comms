@@ -1,3 +1,4 @@
+// src/pages/Messaging.jsx
 import { useState, useEffect } from "react";
 import {
   Send,
@@ -15,31 +16,35 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 
 export default function Messaging() {
-  const [contacts, setContacts] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
   const [templates, setTemplates] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [selectedChannels, setSelectedChannels] = useState([]);
   const [preview, setPreview] = useState("");
+  const [recipientCount, setRecipientCount] = useState(0);
 
   const user = auth.currentUser;
 
-  // Fetch contacts
+  // ✅ Fetch groups from contacts collection
   useEffect(() => {
     if (!user) return;
-    const unsubscribe = onSnapshot(
-      collection(db, "users", user.uid, "contacts"),
-      (snapshot) => {
-        setContacts(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      }
-    );
+    const q = query(collection(db, "contacts"), where("uid", "==", user.uid));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const all = snapshot.docs.map((doc) => doc.data());
+      const uniqueGroups = [...new Set(all.map((c) => c.group || "General"))];
+      setGroups(uniqueGroups);
+    });
     return () => unsubscribe();
   }, [user]);
 
-  // Fetch templates
+  // ✅ Fetch templates
   useEffect(() => {
     if (!user) return;
     const unsubscribe = onSnapshot(
@@ -51,7 +56,7 @@ export default function Messaging() {
     return () => unsubscribe();
   }, [user]);
 
-  // Update preview when template selected
+  // ✅ Update preview from template
   useEffect(() => {
     if (selectedTemplate) {
       setPreview(selectedTemplate.message);
@@ -60,14 +65,41 @@ export default function Messaging() {
     }
   }, [selectedTemplate]);
 
-  // Toggle contact selection
-  const toggleContact = (id) => {
-    setSelectedContacts((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+  // ✅ Toggle group selection
+  const toggleGroup = async (group) => {
+    let updatedGroups = selectedGroups.includes(group)
+      ? selectedGroups.filter((g) => g !== group)
+      : [...selectedGroups, group];
+
+    setSelectedGroups(updatedGroups);
+
+    // Fetch contacts for selected groups
+    if (!user) return;
+    let allRecipients = [];
+    for (const g of updatedGroups) {
+      const q = query(
+        collection(db, "contacts"),
+        where("uid", "==", user.uid),
+        where("group", "==", g)
+      );
+      const snapshot = await getDocs(q);
+      const contacts = snapshot.docs.map((doc) => doc.data());
+      allRecipients = [...allRecipients, ...contacts];
+    }
+
+    // Remove duplicates by phone/email
+    const uniqueRecipients = Object.values(
+      allRecipients.reduce((acc, c) => {
+        const key = c.phone || c.email;
+        if (!acc[key]) acc[key] = c;
+        return acc;
+      }, {})
     );
+
+    setRecipientCount(uniqueRecipients.length);
   };
 
-  // Toggle channel selection
+  // ✅ Toggle channel selection
   const toggleChannel = (channel) => {
     setSelectedChannels((prev) =>
       prev.includes(channel)
@@ -76,32 +108,53 @@ export default function Messaging() {
     );
   };
 
-  // Handle send → Save to Firestore
+  // ✅ Handle Send
   const handleSend = async () => {
-    if (!user || selectedContacts.length === 0 || selectedChannels.length === 0) {
-      alert("⚠️ Please select at least one contact, one template, and one channel.");
+    if (!user || selectedGroups.length === 0 || selectedChannels.length === 0) {
+      alert("⚠️ Please select at least one group, one template, and one channel.");
       return;
     }
 
     try {
-      for (const contactId of selectedContacts) {
-        const contact = contacts.find((c) => c.id === contactId);
+      let allRecipients = [];
+      for (const group of selectedGroups) {
+        const q = query(
+          collection(db, "contacts"),
+          where("uid", "==", user.uid),
+          where("group", "==", group)
+        );
+        const snapshot = await getDocs(q);
+        allRecipients = [...allRecipients, ...snapshot.docs.map((doc) => doc.data())];
+      }
 
+      const uniqueRecipients = Object.values(
+        allRecipients.reduce((acc, c) => {
+          const key = c.phone || c.email;
+          if (!acc[key]) acc[key] = c;
+          return acc;
+        }, {})
+      );
+
+      // Save logs for each recipient + channel
+      for (const contact of uniqueRecipients) {
         for (const channel of selectedChannels) {
-          const ref = await addDoc(collection(db, "users", user.uid, "messages"), {
-            contactId: contact.id,
-            contactName: contact.name || "Unnamed",
-            contactPhone: contact.phone || "",
-            contactEmail: contact.email || "",
-            channel,
-            templateId: selectedTemplate?.id || null,
-            templateTitle: selectedTemplate?.title || "",
-            message: preview,
-            timestamp: serverTimestamp(),
-            status: "pending", // start as pending
-          });
+          const ref = await addDoc(
+            collection(db, "users", user.uid, "messages"),
+            {
+              contactName: contact.name || "Unnamed",
+              contactPhone: contact.phone || "",
+              contactEmail: contact.email || "",
+              groups: selectedGroups,
+              channel,
+              templateId: selectedTemplate?.id || null,
+              templateTitle: selectedTemplate?.title || "",
+              message: preview,
+              timestamp: serverTimestamp(),
+              status: "pending",
+            }
+          );
 
-          // Simulate delivery after 2–5 seconds
+          // Simulate delivery after 2–5s
           setTimeout(async () => {
             const randomOutcome = Math.random();
             let status = "delivered";
@@ -114,11 +167,14 @@ export default function Messaging() {
         }
       }
 
-      alert("✅ Messages stored in Firestore (simulation). APIs can send them for real next!");
-      setSelectedContacts([]);
+      alert(
+        `✅ Message queued for ${uniqueRecipients.length} recipients across ${selectedGroups.length} groups`
+      );
+      setSelectedGroups([]);
       setSelectedTemplate(null);
       setSelectedChannels([]);
       setPreview("");
+      setRecipientCount(0);
     } catch (err) {
       console.error("Error sending messages:", err);
       alert("❌ Failed to send messages.");
@@ -129,36 +185,38 @@ export default function Messaging() {
     <div className="p-8 space-y-8">
       <h1 className="text-3xl font-bold mb-4">Step 3: Messaging</h1>
       <p className="opacity-80">
-        Choose contacts, apply templates, and send via multiple channels.
+        Choose groups, apply templates, and send via multiple channels.
       </p>
 
-      {/* Select Contacts */}
+      {/* Select Groups */}
       <div className="p-6 border rounded-xl bg-[var(--color-bg-alt)]">
         <h2 className="text-xl font-semibold flex items-center gap-2 mb-3">
           <Users className="w-6 h-6 text-[var(--color-brand)]" />
-          Select Contacts
+          Select Groups
         </h2>
-        {contacts.length === 0 ? (
-          <p className="opacity-70">No contacts found.</p>
+        {groups.length === 0 ? (
+          <p className="opacity-70">No groups found.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {contacts.map((c) => (
+            {groups.map((g) => (
               <button
-                key={c.id}
-                onClick={() => toggleContact(c.id)}
+                key={g}
+                onClick={() => toggleGroup(g)}
                 className={`px-3 py-2 rounded border ${
-                  selectedContacts.includes(c.id)
+                  selectedGroups.includes(g)
                     ? "bg-[var(--color-brand)] text-white"
                     : "bg-[var(--color-bg-input)]"
                 }`}
               >
-                {c.name}{" "}
-                <span className="opacity-70 text-xs">
-                  {c.phone || c.email}
-                </span>
+                {g}
               </button>
             ))}
           </div>
+        )}
+        {recipientCount > 0 && (
+          <p className="mt-3 text-sm opacity-80">
+            ✅ {recipientCount} total recipients will get this message
+          </p>
         )}
       </div>
 
