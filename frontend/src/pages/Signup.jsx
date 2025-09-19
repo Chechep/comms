@@ -296,7 +296,7 @@ export default function Signup() {
           Already have an account?{" "}
           <Link
             to="/Login"
-            className="text-[var(--color-brand)] hover:underline"
+            className="font-bold hover:underline"
           >
             Login
           </Link>

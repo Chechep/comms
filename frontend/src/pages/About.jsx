@@ -1,37 +1,87 @@
-// About.jsx
+// src/pages/About.jsx
+import { motion } from "framer-motion";
+import { UploadCloud, Settings, Send, BarChart2 } from "lucide-react";
+
+const steps = [
+  {
+    step: "01",
+    icon: <UploadCloud className="w-8 h-8 text-[var(--color-brand)]" />,
+    title: "Import Your Contacts",
+    description:
+      "Upload your contact lists or integrate with your existing CRM, ERP, or database system for seamless communication.",
+    features: ["CSV/Excel import", "Firebase/Database integration", "Bulk data validation"],
+  },
+  {
+    step: "02",
+    icon: <Settings className="w-8 h-8 text-[var(--color-brand)]" />,
+    title: "Configure Communication",
+    description:
+      "Set up automated responses, alert templates, and reminders to keep your team and clients informed.",
+    features: ["Custom automated responses", "Alert & notification templates", "Scheduled reminders"],
+  },
+  {
+    step: "03",
+    icon: <Send className="w-8 h-8 text-[var(--color-brand)]" />,
+    title: "Start Communicating",
+    description:
+      "Send messages instantly via SMS, WhatsApp, email, or multiple channels at once. Monitor delivery and engagement in real-time.",
+    features: ["Multi-channel messaging", "Real-time delivery monitoring", "Engagement analytics"],
+  },
+  {
+    step: "04",
+    icon: <BarChart2 className="w-8 h-8 text-[var(--color-brand)]" />,
+    title: "Analyze & Optimize",
+    description:
+      "Collect feedback, view detailed analytics, and improve your communication strategy for better results.",
+    features: ["Advanced analytics", "Feedback collection", "Performance insights"],
+  },
+];
+
 export default function About() {
-    return (
-      <section
-        className="min-h-screen flex items-center justify-center px-6 py-20"
-        style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
-      >
-        <div className="max-w-4xl text-center space-y-8">
-          {/* Heading */}
-          <h1
-            className="text-4xl sm:text-5xl font-extrabold"
-            style={{ color: "var(--color-text)" }}
+  return (
+    <section
+      className="min-h-screen py-20 px-6 transition-colors"
+      style={{ background: "var(--color-bg)", color: "var(--color-text)" }}
+    >
+      <div className="max-w-6xl mx-auto text-center mb-12">
+        <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
+          Get Started in 4 Simple Steps
+        </h1>
+        <p className="text-lg sm:text-xl opacity-80 leading-relaxed">
+          Set up your organization's communication system in minutes, not hours. Our intuitive platform makes it easy to connect with your team, clients, or community.
+        </p>
+      </div>
+
+      <div className="grid gap-8 md:grid-cols-2 max-w-6xl mx-auto">
+        {steps.map((step, idx) => (
+          <motion.div
+            key={step.step}
+            className="bg-[var(--color-bg-alt,transparent)] border border-[var(--color-text)]/10 backdrop-blur-md rounded-xl p-6 shadow-md flex flex-col items-start text-left transition hover:shadow-[0_0_20px_#fff]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: idx * 0.2 }}
+            viewport={{ once: true }}
           >
-            About Us
-          </h1>
-  
-          {/* Divider line */}
-          <div className="w-24 h-1 mx-auto rounded-full" style={{ background: "var(--color-brand)" }} />
-  
-          {/* Content */}
-          <p className="text-lg sm:text-xl opacity-80 leading-relaxed">
-            At <span className="font-bold">Comms</span>, we believe in simplifying
-            communication for organizations of every size. Our mission is to
-            provide reliable, secure, and scalable solutions that empower schools,
-            hospitals, companies, and communities to stay connected.
-          </p>
-  
-          <p className="text-lg opacity-80 leading-relaxed">
-            With our unified platform — covering SMS, WhatsApp, email, and voice —
-            we help organizations streamline workflows, improve engagement, and
-            build stronger relationships with the people that matter most.
-          </p>
-        </div>
-      </section>
-    );
-  }
-  
+            <motion.div
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-bg)] mb-4"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }}
+            >
+              {step.icon}
+            </motion.div>
+            <h3 className="text-2xl font-semibold mb-2">{step.title}</h3>
+            <p className="text-sm opacity-80 mb-3">{step.description}</p>
+            <ul className="list-disc pl-5 space-y-1 text-sm opacity-80">
+              {step.features.map((feature, fIdx) => (
+                <li key={fIdx}>{feature}</li>
+              ))}
+            </ul>
+            <span className="mt-4 text-xs font-medium opacity-50">
+              Step {step.step} of 4
+            </span>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}

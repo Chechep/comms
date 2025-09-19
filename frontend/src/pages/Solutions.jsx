@@ -5,19 +5,19 @@ import { Clock, Users, CheckCircle } from "lucide-react";
 export default function Solutions() {
   const stats = [
     {
-      icon: <Clock className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      icon: <Clock className="w-10 h-10 text-[var(--color-brand)]" />,
       value: "< 2 sec",
       label: "Message Delivery",
       description: "Lightning-fast message delivery worldwide",
     },
     {
-      icon: <Users className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      icon: <Users className="w-10 h-10 text-[var(--color-brand)]" />,
       value: "10k+",
       label: "Recipients",
-      description: "Broadcast to unlimited parents and students",
+      description: "Broadcast to unlimited people with ease",
     },
     {
-      icon: <CheckCircle className="w-10 h-10 mx-auto mb-4 text-[var(--color-brand)]" />,
+      icon: <CheckCircle className="w-10 h-10 text-[var(--color-brand)]" />,
       value: "99.5%",
       label: "Open Rate",
       description: "Higher engagement than email communication",
@@ -42,13 +42,34 @@ export default function Solutions() {
           {stats.map((stat, idx) => (
             <motion.div
               key={idx}
-              className="rounded-xl border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md shadow-md p-6 flex flex-col items-center text-center"
+              className="rounded-xl border border-[var(--color-text)]/10 bg-[var(--color-bg-alt,transparent)] backdrop-blur-md p-6 flex flex-col items-center text-center"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
             >
-              {stat.icon}
+              {/* Floating Icon + Pulsing Shadow */}
+              <motion.div
+                animate={{
+                  y: [0, -8, 0],
+                  boxShadow: [
+                    "0 15px 30px rgba(255, 255, 255, 0.2)",
+                    "0 25px 40px rgba(255, 255, 255, 0.35)",
+                    "0 15px 30px rgba(255, 255, 255, 0.2)",
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "easeInOut",
+                  delay: idx * 0.2,
+                }}
+                className="mb-4 rounded-xl p-2"
+              >
+                {stat.icon}
+              </motion.div>
+
               <h3 className="text-3xl md:text-4xl font-bold text-[var(--color-brand)]">
                 {stat.value}
               </h3>
