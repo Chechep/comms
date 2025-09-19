@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin } from "lucide-react";
+import { Facebook, Twitter, Instagram } from "lucide-react";
 
 export default function Footer() {
   const navItems = [
@@ -46,7 +46,7 @@ export default function Footer() {
 
         {/* Social Icons */}
         <div className="flex gap-5">
-          {[Facebook, Twitter, Linkedin].map((Icon, idx) => (
+          {[Facebook, Twitter, Instagram].map((Icon, idx) => (
             <a
               key={idx}
               href="#"
