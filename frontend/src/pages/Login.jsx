@@ -1,3 +1,4 @@
+// src/pages/Signin.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -13,13 +14,11 @@ export default function Signin() {
   const [loading, setLoading] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
   const validateField = (name, value) => {
     let error = "";
     if (name === "email") {
       if (!emailRegex.test(value)) error = "Enter a valid email address.";
-      else if (!gmailRegex.test(value)) error = "Email must be a Gmail address.";
     }
     if (name === "password") {
       if (!value) error = "Password is required.";
@@ -64,7 +63,7 @@ export default function Signin() {
       try {
         setLoading(true);
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        navigate("/home");
+        navigate("/dashboard"); // redirect to dashboard
       } catch (err) {
         alert(err.message);
       } finally {
@@ -77,7 +76,7 @@ export default function Signin() {
     try {
       setLoading(true);
       await signInWithPopup(auth, googleProvider);
-      navigate("/home");
+      navigate("/dashboard"); // redirect to dashboard
     } catch (err) {
       alert(err.message);
     } finally {
@@ -97,7 +96,7 @@ export default function Signin() {
             <input
               type="email"
               name="email"
-              placeholder="Enter your Gmail address"
+              placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -125,11 +124,7 @@ export default function Signin() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >
-              {showPassword ? (
-                <EyeOff size={20} className="text-black dark:text-white" />
-              ) : (
-                <Eye size={20} className="text-black dark:text-white" />
-              )}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
             {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
           </div>
@@ -157,11 +152,7 @@ export default function Signin() {
           onClick={handleGoogleSignin}
           disabled={loading}
           className="w-full flex items-center justify-center gap-3 px-6 py-3 border rounded-lg shadow-md transition hover:shadow-[0_0_10px_var(--color-brand)] hover:scale-105 disabled:opacity-50"
-          style={{
-            background: "#fff",
-            color: "#000",
-            borderColor: "#000",
-          }}
+          style={{ background: "#fff", color: "#000", borderColor: "#000" }}
         >
           <svg className="w-5 h-5" viewBox="0 0 533.5 544.3">
             <path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-34.1-4.5-50.4H272v95.3h146.9c-6.4 34.4-25 63.5-53.5 83.1v68h86.5c50.5-46.4 81.6-115.1 81.6-196z"/>
@@ -174,7 +165,7 @@ export default function Signin() {
 
         <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
-          <Link to="/Signup" className="hover:underline">
+          <Link to="/signup" className="hover:underline">
             Sign Up
           </Link>
         </p>

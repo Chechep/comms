@@ -1,22 +1,38 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, User, LogOut } from "lucide-react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Navbar({ darkMode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  // Glow only in dark mode
   const glowStyle = darkMode
     ? { boxShadow: "0 0 10px var(--color-brand), 0 0 20px var(--color-brand)" }
     : {};
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Solutions", path: "/solutions" },
-    { name: "Contact", path: "/contact" },
-  ];
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
+
+  const navItems = user
+    ? [{ name: "About", path: "/about" }]
+    : [
+        { name: "Home", path: "/" },
+        { name: "Get Started", path: "/about" },
+        { name: "Services", path: "/services" },
+        { name: "Contact", path: "/contact" },
+      ];
 
   const buttonClass =
     "px-4 py-2 text-sm font-medium rounded-lg border transition transform duration-200 focus:outline-none hover:scale-110 hover:animate-shake";
@@ -47,31 +63,67 @@ export default function Navbar({ darkMode }) {
               </Link>
             ))}
 
-            {/* Login */}
-            <Link
-              to="/login"
-              className={`${buttonClass}`}
-              style={{
-                color: "var(--color-text)",
-                borderColor: "var(--color-text)",
-                ...glowStyle,
-              }}
-            >
-              Login
-            </Link>
-
-            {/* Signup */}
-            <Link
-              to="/signup"
-              className={`${buttonClass}`}
-              style={{
-                color: "var(--color-text)",
-                borderColor: "var(--color-text)",
-                ...glowStyle,
-              }}
-            >
-              Start Free Trial
-            </Link>
+            {!user ? (
+              <>
+                <Link
+                  to="/login"
+                  className={`${buttonClass}`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className={`${buttonClass}`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
+                >
+                  Start Free Trial
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/dashboard"
+                  className={`${buttonClass} flex items-center gap-1`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3 py-2 rounded-full border transition hover:scale-110 hover:animate-shake flex items-center gap-1"
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                >
+                  <User size={20} />
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className={`${buttonClass} flex items-center gap-1`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,31 +153,76 @@ export default function Navbar({ darkMode }) {
               {item.name}
             </Link>
           ))}
+
           <div className="flex flex-col space-y-2 mt-2">
-            <Link
-              to="/login"
-              className={`${buttonClass} text-center`}
-              style={{
-                color: "var(--color-text)",
-                borderColor: "var(--color-text)",
-                ...glowStyle,
-              }}
-              onClick={() => setIsOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className={`${buttonClass} text-center`}
-              style={{
-                color: "var(--color-text)",
-                borderColor: "var(--color-text)",
-                ...glowStyle,
-              }}
-              onClick={() => setIsOpen(false)}
-            >
-              Start Free Trial
-            </Link>
+            {!user ? (
+              <>
+                <Link
+                  to="/login"
+                  className={`${buttonClass} text-center`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className={`${buttonClass} text-center`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Start Free Trial
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/dashboard"
+                  className={`${buttonClass} flex items-center gap-1 text-center`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3 py-2 rounded-full border transition hover:scale-110 hover:animate-shake flex items-center gap-1 text-center"
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <User size={20} />
+                  Profile
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className={`${buttonClass} flex items-center gap-1 justify-center`}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                  }}
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
