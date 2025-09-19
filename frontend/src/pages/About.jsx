@@ -1,6 +1,8 @@
 // src/pages/About.jsx
 import { motion } from "framer-motion";
 import { UploadCloud, Settings, Send, BarChart2 } from "lucide-react";
+import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -38,6 +40,17 @@ const steps = [
 ];
 
 export default function About() {
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleGetStarted = () => {
+    if (auth.currentUser) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <section
       className="min-h-screen py-20 px-6 transition-colors"
@@ -81,6 +94,16 @@ export default function About() {
             </span>
           </motion.div>
         ))}
+      </div>
+
+      {/* ✅ Get Started button */}
+      <div className="text-center mt-16">
+        <button
+          onClick={handleGetStarted}
+          className="px-6 py-3 bg-[var(--color-brand)] text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition"
+        >
+          Get Started
+        </button>
       </div>
     </section>
   );

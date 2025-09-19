@@ -85,7 +85,7 @@ export default function Signup() {
         displayName: formData.username,
       });
       alert("Signup successful!");
-      navigate("/dashboard");
+      navigate("/about"); // ✅ redirect to About instead of Dashboard
     } catch (error) {
       console.error(error.message);
       setErrors({ general: error.message });
@@ -97,7 +97,7 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard");
+      navigate("/about"); // ✅ redirect to About instead of Dashboard
     } catch (error) {
       console.error(error.message);
       setErrors({ general: error.message });

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -47,6 +47,8 @@ function App() {
                   </PrivateRoute>
                 }
               >
+                {/* ✅ Redirect to Contacts when /dashboard is visited */}
+                <Route index element={<Navigate to="contacts" replace />} />
                 <Route path="contacts" element={<Contacts />} />
                 <Route path="templates" element={<Templates />} />
                 <Route path="messaging" element={<Messaging />} />
@@ -61,7 +63,6 @@ function App() {
                   </PrivateRoute>
                 }
               />
-
             </Routes>
           </main>
           <Footer />

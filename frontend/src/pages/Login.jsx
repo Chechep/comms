@@ -63,7 +63,7 @@ export default function Signin() {
       try {
         setLoading(true);
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        navigate("/dashboard"); // redirect to dashboard
+        navigate("/about"); // redirect to About page
       } catch (err) {
         alert(err.message);
       } finally {
@@ -76,7 +76,7 @@ export default function Signin() {
     try {
       setLoading(true);
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard"); // redirect to dashboard
+      navigate("/about"); // redirect to About page
     } catch (err) {
       alert(err.message);
     } finally {
