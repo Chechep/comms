@@ -15,7 +15,9 @@ export default function Navbar({ darkMode }) {
     : {};
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => setUser(currentUser));
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
     return () => unsubscribe();
   }, []);
 
@@ -40,13 +42,28 @@ export default function Navbar({ darkMode }) {
     <nav className="fixed w-full z-50 top-0 backdrop-blur-md bg-[var(--color-bg)]/70">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
+          {/* Logo / Username */}
           <Link
             to="/"
-            className="text-2xl font-bold drop-shadow-lg"
+            className="text-2xl font-bold drop-shadow-lg flex items-center gap-2"
             style={{ color: "var(--color-text)" }}
           >
-            Comms
+            {user ? (
+              <>
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full object-cover border"
+                  />
+                ) : (
+                  <User size={28} />
+                )}
+                <span>{user.displayName || user.email?.split("@")[0]}</span>
+              </>
+            ) : (
+              "Comms"
+            )}
           </Link>
 
           {/* Desktop Menu */}
@@ -67,14 +84,22 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/login"
                   className={buttonClass}
-                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
                   className={buttonClass}
-                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
                 >
                   Start Free Trial
                 </Link>
@@ -140,7 +165,11 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/login"
                   className={`${buttonClass} text-center`}
-                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
                   onClick={() => setIsOpen(false)}
                 >
                   Login
@@ -148,7 +177,11 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/signup"
                   className={`${buttonClass} text-center`}
-                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
+                  style={{
+                    color: "var(--color-text)",
+                    borderColor: "var(--color-text)",
+                    ...glowStyle,
+                  }}
                   onClick={() => setIsOpen(false)}
                 >
                   Start Free Trial
