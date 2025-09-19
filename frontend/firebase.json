@@ -1,0 +1,17 @@
+{
+  "emulators": {
+    "auth": {
+      "port": 5173
+    },
+    "functions": {
+      "port": 5173
+    },
+    "firestore": {
+      "port": 5173
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}
