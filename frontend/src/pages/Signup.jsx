@@ -85,7 +85,7 @@ export default function Signup() {
         displayName: formData.username,
       });
       alert("Signup successful!");
-      navigate("/home");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error.message);
       setErrors({ general: error.message });
@@ -97,7 +97,7 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/home");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error.message);
       setErrors({ general: error.message });
@@ -294,10 +294,7 @@ export default function Signup() {
 
         <p className="text-center mt-4 text-sm">
           Already have an account?{" "}
-          <Link
-            to="/Login"
-            className="font-bold hover:underline"
-          >
+          <Link to="/Login" className="font-bold hover:underline">
             Login
           </Link>
         </p>

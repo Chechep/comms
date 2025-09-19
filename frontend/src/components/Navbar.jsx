@@ -1,3 +1,4 @@
+// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
@@ -14,9 +15,7 @@ export default function Navbar({ darkMode }) {
     : {};
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => setUser(currentUser));
     return () => unsubscribe();
   }, []);
 
@@ -67,23 +66,15 @@ export default function Navbar({ darkMode }) {
               <>
                 <Link
                   to="/login"
-                  className={`${buttonClass}`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                    ...glowStyle,
-                  }}
+                  className={buttonClass}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className={`${buttonClass}`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                    ...glowStyle,
-                  }}
+                  className={buttonClass}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
                 >
                   Start Free Trial
                 </Link>
@@ -93,34 +84,23 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/dashboard"
                   className={`${buttonClass} flex items-center gap-1`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                 >
                   Dashboard
                 </Link>
                 <Link
                   to="/profile"
                   className="px-3 py-2 rounded-full border transition hover:scale-110 hover:animate-shake flex items-center gap-1"
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                 >
-                  <User size={20} />
-                  Profile
+                  <User size={20} /> Profile
                 </Link>
                 <button
                   onClick={handleLogout}
                   className={`${buttonClass} flex items-center gap-1`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                 >
-                  <LogOut size={18} />
-                  Logout
+                  <LogOut size={18} /> Logout
                 </button>
               </>
             )}
@@ -160,11 +140,7 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/login"
                   className={`${buttonClass} text-center`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                    ...glowStyle,
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
                   onClick={() => setIsOpen(false)}
                 >
                   Login
@@ -172,11 +148,7 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/signup"
                   className={`${buttonClass} text-center`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                    ...glowStyle,
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)", ...glowStyle }}
                   onClick={() => setIsOpen(false)}
                 >
                   Start Free Trial
@@ -187,10 +159,7 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/dashboard"
                   className={`${buttonClass} flex items-center gap-1 text-center`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                   onClick={() => setIsOpen(false)}
                 >
                   Dashboard
@@ -198,14 +167,10 @@ export default function Navbar({ darkMode }) {
                 <Link
                   to="/profile"
                   className="px-3 py-2 rounded-full border transition hover:scale-110 hover:animate-shake flex items-center gap-1 text-center"
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                   onClick={() => setIsOpen(false)}
                 >
-                  <User size={20} />
-                  Profile
+                  <User size={20} /> Profile
                 </Link>
                 <button
                   onClick={() => {
@@ -213,13 +178,9 @@ export default function Navbar({ darkMode }) {
                     setIsOpen(false);
                   }}
                   className={`${buttonClass} flex items-center gap-1 justify-center`}
-                  style={{
-                    color: "var(--color-text)",
-                    borderColor: "var(--color-text)",
-                  }}
+                  style={{ color: "var(--color-text)", borderColor: "var(--color-text)" }}
                 >
-                  <LogOut size={18} />
-                  Logout
+                  <LogOut size={18} /> Logout
                 </button>
               </>
             )}
