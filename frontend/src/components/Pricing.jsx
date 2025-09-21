@@ -86,7 +86,7 @@ export default function Pricing() {
             </ul>
 
             <a
-              href={plan.cta === "Contact Sales" ? "/contact" : "/signup"}
+              href={plan.cta === "Contact Sales" ? "/contact" : "/Login"}
               className="mt-auto inline-block px-5 py-2 rounded-lg border font-semibold hover:scale-105 hover:shadow-md transition-transform duration-300"
               style={{
                 color: "var(--color-text)",
