@@ -1,10 +1,15 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"), // 👈 add this
+    },
+  },
   build: {
-    chunkSizeWarningLimit: 3000, // increase limit (default is 500kb)
+    chunkSizeWarningLimit: 3000,
   },
 });

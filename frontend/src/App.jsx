@@ -18,6 +18,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 
 import ThemeProvider from "./components/ThemeProvider";
+import { Toaster } from "react-hot-toast"; // ✅ add toaster
 
 function App() {
   return (
@@ -66,6 +67,8 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          {/* ✅ Toaster must be inside ThemeProvider/Router */}
+          <Toaster position="top-right" />
         </div>
       </Router>
     </ThemeProvider>
