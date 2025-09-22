@@ -5,6 +5,8 @@
 /* Default (teal theme) */
 :root.theme-teal {
   --color-brand: #0d9488; /* teal-600 */
+  --color-brand-dark: #0b7a70; /* slightly darker teal */
+  --color-brand-darker: #065f5b; /* deep teal for contrast */
   --color-bg: linear-gradient(135deg, #0f766e, #14b8a6); /* teal gradient */
   --color-text: #ffffff;
 }
@@ -12,6 +14,8 @@
 /* Zinc theme */
 :root.theme-zinc {
   --color-brand: #52525b; /* zinc-600 */
+  --color-brand-dark: #3f3f46; /* zinc-700 */
+  --color-brand-darker: #27272a; /* zinc-900 */
   --color-bg: linear-gradient(135deg, #3f3f46, #71717a); /* zinc gradient */
   --color-text: #ffffff;
 }
@@ -19,6 +23,8 @@
 /* Aqua (cyan) theme */
 :root.theme-cyan {
   --color-brand: #0891b2; /* cyan-600 */
+  --color-brand-dark: #0e7490; /* cyan-700 */
+  --color-brand-darker: #155e75; /* cyan-800 */
   --color-bg: linear-gradient(135deg, #0e7490, #22d3ee); /* aqua gradient */
   --color-text: #ffffff;
 }
@@ -26,6 +32,8 @@
 /* Rose theme */
 :root.theme-rose {
   --color-brand: #e11d48; /* rose-600 */
+  --color-brand-dark: #be123c; /* rose-700 */
+  --color-brand-darker: #9f1239; /* rose-800 */
   --color-bg: linear-gradient(135deg, #be123c, #f43f5e); /* rose gradient */
   --color-text: #ffffff;
 }
@@ -33,6 +41,8 @@
 /* Light theme (reverse of dark mode) */
 :root.theme-light {
   --color-brand: #000000; /* black accent */
+  --color-brand-dark: #484848; /* darker gray for panels */
+  --color-brand-darker: #4e4e4e; /* near black for messages */
   --color-bg: #ffffff;    /* plain white background */
   --color-text: #000000;  /* black text */
 }
