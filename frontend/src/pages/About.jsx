@@ -10,15 +10,15 @@ const steps = [
     icon: <UploadCloud className="w-8 h-8 text-[var(--color-brand)]" />,
     title: "Import Your Contacts",
     description:
-      "Upload your contact lists or integrate with your existing CRM, ERP, or database system for seamless communication.",
-    features: ["CSV/Excel import", "Firebase/Database integration", "Bulk data validation"],
+      "Upload your contact lists or integrate with your existing database for seamless communication.",
+    features: ["CSV/Excel import", "Database integration", "Data validation"],
   },
   {
     step: "02",
     icon: <Settings className="w-8 h-8 text-[var(--color-brand)]" />,
     title: "Configure Communication",
     description:
-      "Set up automated responses, alert templates, and reminders to keep your team and clients informed.",
+      "Set up automated responses, alert templates and reminders to keep your team and clients informed.",
     features: ["Custom automated responses", "Alert & notification templates", "Scheduled reminders"],
   },
   {
@@ -26,8 +26,8 @@ const steps = [
     icon: <Send className="w-8 h-8 text-[var(--color-brand)]" />,
     title: "Start Communicating",
     description:
-      "Send messages instantly via SMS, WhatsApp, email, or multiple channels at once. Monitor delivery and engagement in real-time.",
-    features: ["Multi-channel messaging", "Real-time delivery monitoring", "Engagement analytics"],
+      "Send messages instantly via SMS, WhatsApp and email or both at once. Monitor delivery and engagement in real-time.",
+    features: ["Multi-channel messaging", "Message preview", "Real-time delivery monitoring"],
   },
   {
     step: "04",
@@ -35,7 +35,7 @@ const steps = [
     title: "Analyze & Optimize",
     description:
       "Collect feedback, view detailed analytics, and improve your communication strategy for better results.",
-    features: ["Advanced analytics", "Feedback collection", "Performance insights"],
+    features: ["Engagement analytics", "Feedback collection", "Performance insights"],
   },
 ];
 
