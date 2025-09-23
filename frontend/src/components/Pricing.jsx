@@ -4,29 +4,26 @@ export default function Pricing() {
   const plans = [
     {
       name: "Starter",
-      price: "$99/month",
+      price: "Ksh.899/month",
       description: "Perfect for small organizations getting started",
       features: [
-        "Up to 5,000 messages/month",
-        "SMS & Email support",
-        "Basic templates",
-        "Standard support",
+        "Up to 10,000 messages/month",
+        "SMS, WhatsApp & Email support",
+        "Templates",
         "Basic analytics",
       ],
       cta: "Start Free Trial",
     },
     {
       name: "Professional",
-      price: "$299/month",
+      price: "Ksh.7,500/month",
       description: "Ideal for growing businesses and mid-size organizations",
       features: [
-        "Up to 25,000 messages/month",
-        "SMS, WhatsApp, Voice & Email",
-        "Custom templates",
-        "Priority support",
+        "Up to 100,000 messages/month",
+        "All communication channels",
+        "Templates",
         "Advanced analytics",
         "Two-way messaging",
-        "API access",
       ],
       cta: "Start Free Trial",
     },
@@ -37,12 +34,10 @@ export default function Pricing() {
       features: [
         "Unlimited messages",
         "All communication channels",
+        "Templates",
+        "Advanced analytics",
         "Custom integrations",
-        "Dedicated support",
-        "Advanced security",
-        "Custom reporting",
-        "SLA guarantee",
-        "White-label options",
+        "Two-way messaging",
       ],
       cta: "Contact Sales",
     },
@@ -58,7 +53,7 @@ export default function Pricing() {
       </h2>
       <p className="text-lg mb-8 max-w-2xl mx-auto opacity-80">
         Choose the plan that fits your organization's communication needs. All
-        plans include a 14-day free trial.
+        plans include a 7-day free trial.
       </p>
 
       {/* Plans */}
@@ -79,7 +74,7 @@ export default function Pricing() {
             <ul className="mb-4 space-y-2 text-left">
               {plan.features.map((f, i) => (
                 <li key={i} className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-400 shrink-0" />
+                  <Check className="w-5 h-5 text-green-500 shrink-0" />
                   <span>{f}</span>
                 </li>
               ))}

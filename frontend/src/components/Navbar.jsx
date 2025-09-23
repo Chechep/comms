@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
@@ -93,7 +92,7 @@ export default function Navbar({ darkMode }) {
                   Login
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/Login"
                   className={buttonClass}
                   style={{
                     color: "var(--color-text)",
@@ -175,7 +174,7 @@ export default function Navbar({ darkMode }) {
                   Login
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/Login"
                   className={`${buttonClass} text-center`}
                   style={{
                     color: "var(--color-text)",

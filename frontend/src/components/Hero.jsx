@@ -40,28 +40,28 @@ export default function Hero() {
           </h1>
 
           <p className="text-lg sm:text-xl mb-8 opacity-80 max-w-xl text-[var(--color-text)]">
-            Power your business with SMS, WhatsApp, voice calls, and email —
-            all in one platform serving schools, hospitals, companies, and more.
+            Power your business with SMS, WhatsApp, voice calls and email —
+            all in one platform serving schools, hospitals, companies and more.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-10">
             <Link
-              to="/signup"
+              to="/Login"
               className="px-6 py-3 rounded-lg font-semibold text-white shadow-lg hover:scale-105 transition"
               style={{ background: "var(--color-brand)" }}
             >
               Start Free Trial
             </Link>
             <Link
-              to="/demo"
+              to="/About"
               className="px-6 py-3 rounded-lg border font-semibold flex items-center justify-center gap-2 hover:scale-105 transition"
               style={{
                 borderColor: "var(--color-text)",
                 color: "var(--color-text)",
               }}
             >
-              <Play size={18} /> Watch Demo
+              <Play size={18} /> Get Started
             </Link>
           </div>
 
@@ -89,11 +89,12 @@ export default function Hero() {
         {/* RIGHT SIDE (Illustration) */}
         <div className="flex justify-center">
           <img
-            src="/hero-illustration.png"
+            src="/frontend/src/assets/hero-illustration.jpg"
             alt="Communication Illustration"
             className="w-full max-w-md drop-shadow-lg"
           />
         </div>
+        
       </div>
     </section>
   );

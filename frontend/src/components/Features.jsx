@@ -16,12 +16,12 @@ export default function Features() {
     {
       icon: <BarChart3 className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
       title: "Analytics & Reports",
-      description: "Get insights into team performance and project progress.",
+      description: "Get insights into messaging delivery progress.",
     },
     {
       icon: <Cloud className="w-10 h-10 mb-4 mx-auto text-[var(--color-brand)]" />,
       title: "Secure Cloud Storage",
-      description: "Keep all your files safe and accessible anywhere, anytime.",
+      description: "Keep all your files and messages safe, encrypted and accessible anywhere, anytime.",
     },
   ];
 

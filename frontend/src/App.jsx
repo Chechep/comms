@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./components/Services";
 import Solutions from "./pages/Solutions";
-import Contact from "./pages/Contact";
+import Contact from "./pages/ContactUs";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Analytics from "./pages/Analytics";
