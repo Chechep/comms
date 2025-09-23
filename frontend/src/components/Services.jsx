@@ -2,7 +2,6 @@ import {
   GraduationCap,
   Stethoscope,
   Briefcase,
-  ShoppingCart,
   Sparkles,
   Circle,
 } from "lucide-react";
@@ -16,7 +15,7 @@ export default function Services({ darkMode, themeColor }) {
       title: "Education",
       subtitle: "Schools & Universities",
       points: [
-        "Attendance alerts to parents",
+        "Alerts to parents, teachers and students",
         "Exam schedule notifications",
         "Parent-teacher meeting reminders",
         "Emergency broadcasts",
@@ -27,6 +26,7 @@ export default function Services({ darkMode, themeColor }) {
       title: "Healthcare",
       subtitle: "Hospitals & Clinics",
       points: [
+        "Alerts to healthcare providers",
         "Appointment reminders",
         "Lab result notifications",
         "Prescription refill alerts",
@@ -40,19 +40,8 @@ export default function Services({ darkMode, themeColor }) {
       points: [
         "HR announcements",
         "Interview scheduling",
-        "Shift change notifications",
         "Internal communications",
-      ],
-    },
-    {
-      icon: <ShoppingCart size={32} style={{ color: dynamicColor }} />,
-      title: "E-commerce",
-      subtitle: "Retail & Online Stores",
-      points: [
-        "Order confirmations",
-        "Delivery tracking updates",
-        "Promotional campaigns",
-        "Customer support",
+        "Customer support"
       ],
     },
   ];
@@ -72,7 +61,7 @@ export default function Services({ darkMode, themeColor }) {
       </div>
 
       {/* Service Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
         {services.map((service, index) => (
           <div
             key={index}
