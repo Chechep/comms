@@ -1,4 +1,3 @@
-// src/pages/Solutions.jsx
 import { motion } from "framer-motion";
 import { Clock, Users, CheckCircle } from "lucide-react";
 

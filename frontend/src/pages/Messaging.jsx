@@ -1,4 +1,3 @@
-// src/pages/Messaging.jsx
 import { useState, useEffect } from "react";
 import {
   Send,

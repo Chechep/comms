@@ -1,4 +1,3 @@
-// src/pages/Analytics.jsx
 import { useState, useEffect } from "react";
 import { BarChart2, PieChart, Users, Send } from "lucide-react";
 import { auth, db } from "../firebase";

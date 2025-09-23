@@ -1,4 +1,3 @@
-// src/pages/Profile.jsx
 import { useState, useEffect } from "react";
 import { User } from "lucide-react";
 import { auth, reauthenticateUser, db } from "../firebase";

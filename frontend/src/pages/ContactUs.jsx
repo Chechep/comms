@@ -1,4 +1,3 @@
-// Contact.jsx
 import { useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 

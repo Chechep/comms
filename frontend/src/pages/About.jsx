@@ -1,4 +1,3 @@
-// src/pages/About.jsx
 import { motion } from "framer-motion";
 import { UploadCloud, Settings, Send, BarChart2 } from "lucide-react";
 import { getAuth } from "firebase/auth";

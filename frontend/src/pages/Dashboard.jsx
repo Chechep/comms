@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Users, FileText, Send, BarChart2 } from "lucide-react";
 import Chatbot from "../components/Chatbot";

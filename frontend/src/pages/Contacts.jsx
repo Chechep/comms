@@ -1,4 +1,3 @@
-// src/pages/Contacts.jsx
 import { useState, useEffect } from "react";
 import {
   UploadCloud,
