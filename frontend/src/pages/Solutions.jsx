@@ -25,7 +25,7 @@ export default function Solutions() {
 
   return (
     <section
-      className="min-h-screen flex flex-col items-center justify-center transition-colors bg-[var(--color-bg)] text-[var(--color-text)]"
+      className="flex flex-col items-center justify-center transition-colors bg-[var(--color-bg)] text-[var(--color-text)]"
     >
       <div className="max-w-6xl w-full text-center px-4">
         {/* Header */}
